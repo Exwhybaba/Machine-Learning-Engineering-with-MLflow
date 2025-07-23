@@ -15,11 +15,11 @@ import mlflow.sklearn
 
 
 def acquire_training_data():
-    yfin.pdr_override()
-    start = datetime.datetime(2019, 7, 1)
-    end = datetime.datetime(2019, 9, 30)
-    df = pdr.DataReader("BTC-USD", 'yahoo', start, end)
+    start = "2019-07-01"
+    end = "2019-09-30"
+    df = yfin.download("BTC-USD", start=start, end=end)
     return df
+
 
 def digitize(n):
     if n > 0:
@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
         WINDOW_SIZE = 14
 
-        X = rolling_window(btc_mat[:, 7], WINDOW_SIZE)[:-1, :]
+        X = rolling_window(prepared_training_data_df['Delta'].to_numpy(), WINDOW_SIZE)[:-1, :]
         Y = prepared_training_data_df['to_predict'].to_numpy()[WINDOW_SIZE:]
 
         X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25, random_state=4284, stratify=Y)
